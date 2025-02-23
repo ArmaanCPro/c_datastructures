@@ -12,6 +12,7 @@ endif()
 set (SOURCES
 	"src/main.c"
 	"src/linkedlist.h"
+	"src/queue.h"
 	)
 
 source_group("src" FILES ${SOURCES})
