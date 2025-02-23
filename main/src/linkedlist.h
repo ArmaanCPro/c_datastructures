@@ -2,12 +2,13 @@
 
 #include <stdlib.h>
 
-typedef struct
+struct node
 {
     int value;
-    void* next;
-} node;
-
+    struct node* next;
+};
+// weird syntax but necessary for self-referential struct
+typedef struct node node;
 
 typedef struct 
 {
@@ -33,4 +34,35 @@ void ll_push(linked_list* ll_in, int val)
     node* new_node = (node*)malloc(sizeof(node));
     new_node->value = val;
     tracker->next = new_node;
+}
+
+// returns the value of the popped node.
+int ll_pop(linked_list* ll_in)
+{
+    node* tracker = ll_in->head;
+    while (tracker->next->next != NULL)
+    {
+        tracker = tracker->next;
+    }
+
+    int rval = tracker->next->value;
+    free (tracker->next);
+    tracker->next = NULL;
+    return rval;
+}
+
+// ll_in will NOT become null after this, but all the nodes will.
+void ll_free_nodes(linked_list* ll_in)
+{
+    node* tracker = ll_in->head;
+
+    while (tracker->next != NULL)
+    {
+        node* old = tracker;
+        tracker = tracker->next;
+        old->next = NULL; // may not be necessary
+        free(old);
+    }
+
+    free(tracker);
 }
